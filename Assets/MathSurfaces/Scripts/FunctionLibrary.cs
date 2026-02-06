@@ -1,0 +1,76 @@
+using System;
+using UnityEngine;
+
+using static UnityEngine.Mathf;
+
+public static class FunctionLibrary
+{
+  public delegate Vector3 Function (float u, float v, float t);
+
+  public enum FunctionName
+  {
+    Wave,
+    MultiWave,
+    Ripple,
+    Sphere,
+    Torus
+  }
+
+  static Function[] functions = { Wave, MultiWave, Ripple, Sphere, Torus };
+  
+  public static Function GetFunction (FunctionName name)
+  {
+    return functions[(int)name];
+  }
+  
+  public static Vector3 Wave(float u, float v, float t)
+  {
+    Vector3 outV;
+    outV.x = u;
+    outV.y = Sin(PI * (u + v + t)); 
+    outV.z = v;
+   return outV; 
+  }
+  
+  public static Vector3 MultiWave(float u, float v, float t)
+  {
+    Vector3 outV;
+    outV.x = u;
+    outV.y = Sin(PI * (u + 0.5f * t));
+    outV.y += 0.5f * Sin(2f * PI * (v + t));
+    outV.y += Sin(PI * (u + v + 0.25f * t));
+    outV.z = v;
+    return outV;
+  }
+  
+  public static Vector3 Ripple (float u, float v, float t) {
+    float d = Sqrt(u * u + v * v);
+    Vector3 outV;
+    outV.x = u;
+    outV.y = Sin(PI * (4f * d - t));
+    outV.y /= 1f + 10f * d;
+    outV.z = v;
+    return outV;
+  }
+  
+  public static Vector3 Sphere (float u, float v, float t) {
+    float r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t));
+    float s = r * Cos(0.5f * PI * v);
+    Vector3 outV;
+    outV.x = s * Sin(PI * u);
+    outV.y = r * Sin(0.5f * PI * v);
+    outV.z = s * Cos(PI * u);
+    return outV;
+  }
+  
+  public static Vector3 Torus (float u, float v, float t) {
+    float r1 = 0.7f + 0.1f * Sin(PI * (6f * u + 0.5f * t));
+    float r2 = 0.15f + 0.05f * Sin(PI * (8f * u + 4f * v + 2f * t));
+    float s = r1 + r2 * Cos(PI * v);
+    Vector3 outV;
+    outV.x = s * Sin(PI * u);
+    outV.y = r2 * Sin(PI * v);
+    outV.z = s * Cos(PI * u);
+    return outV;
+  }
+}
