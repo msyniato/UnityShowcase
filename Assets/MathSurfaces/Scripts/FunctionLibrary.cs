@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 using static UnityEngine.Mathf;
+using Random = System.Random;
 
 public static class FunctionLibrary
 {
@@ -18,9 +20,27 @@ public static class FunctionLibrary
 
   static Function[] functions = { Wave, MultiWave, Ripple, Sphere, Torus };
   
-  public static Function GetFunction (FunctionName name)
+  public static int FunctionCount => functions.Length;
+
+  public static Function GetFunction(FunctionName name) => functions[(int)name];
+
+  public static FunctionName GetNextFunctionName(FunctionName name) =>
+    (int)name < functions.Length - 1 ? name + 1 : 0;
+
+  public static FunctionName GetRandomFunctionName(FunctionName name)
   {
-    return functions[(int)name];
+    var choice = (FunctionName) UnityEngine.Random.Range(1, functions.Length);
+    return choice == name ? 0 : choice;
+  }
+
+  public static int GetFunctionCount () {
+    return functions.Length;
+  }
+  
+  public static Vector3 Morph (
+    float u, float v, float t, Function from, Function to, float progress
+  ) {
+    return Vector3.LerpUnclamped(from(u, v, t), to(u, v, t), SmoothStep(0f, 1f, progress));
   }
   
   public static Vector3 Wave(float u, float v, float t)
@@ -39,6 +59,7 @@ public static class FunctionLibrary
     outV.y = Sin(PI * (u + 0.5f * t));
     outV.y += 0.5f * Sin(2f * PI * (v + t));
     outV.y += Sin(PI * (u + v + 0.25f * t));
+    outV.y *= 1f / 2.5f;
     outV.z = v;
     return outV;
   }

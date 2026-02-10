@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Material
+  m_Name: SurfaceMaterial
   m_Shader: {fileID: 4800000, guid: c6bf2a4d1e426fe4e9b7b2ccf841fe33, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
